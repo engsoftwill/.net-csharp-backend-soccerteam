@@ -1,0 +1,9 @@
+/home/engwill/codenation/csharp-1/Source/bin/Debug/netstandard2.0/Source.deps.json
+/home/engwill/codenation/csharp-1/Source/bin/Debug/netstandard2.0/Source.dll
+/home/engwill/codenation/csharp-1/Source/bin/Debug/netstandard2.0/Source.pdb
+/home/engwill/codenation/csharp-1/Source/obj/Debug/netstandard2.0/Source.csprojAssemblyReference.cache
+/home/engwill/codenation/csharp-1/Source/obj/Debug/netstandard2.0/Source.csproj.CoreCompileInputs.cache
+/home/engwill/codenation/csharp-1/Source/obj/Debug/netstandard2.0/Source.AssemblyInfoInputs.cache
+/home/engwill/codenation/csharp-1/Source/obj/Debug/netstandard2.0/Source.AssemblyInfo.cs
+/home/engwill/codenation/csharp-1/Source/obj/Debug/netstandard2.0/Source.dll
+/home/engwill/codenation/csharp-1/Source/obj/Debug/netstandard2.0/Source.pdb
