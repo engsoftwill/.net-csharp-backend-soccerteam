@@ -10,4 +10,4 @@ Results File: /home/engwill/codenation/csharp-1/Source.TestSubmission/results.xm
 Test Run Successful.
 Total tests: 25
      Passed: 25
- Total time: 1.0098 Seconds
+ Total time: 1.0038 Seconds

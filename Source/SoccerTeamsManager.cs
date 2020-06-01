@@ -7,18 +7,20 @@ namespace Codenation.Challenge
 {
     public class SoccerTeamsManager : IManageSoccerTeams
     {
-        private List<Player> Players = new List<Player>();  //instancio a lista Players
-        private List<Team>  Teams =  new List<Team>();      //instancio a lista Teams
+        private List<Player> _players   { get; set; }  //instancio a lista _players
+        private List<Team>  _teams      { get; set; }     //instancio a lista _teams
         public SoccerTeamsManager()                         
         {
+            _players = new List<Player>();
+            _teams =  new List<Team>();
         }
         public bool lookforplayers(long ID)                 //método permite verificar se existe o jogador com o ID(id do jogador que desejo testar)
         {
-            return Players.Any(x => x.Id.Equals(ID));       //Any verifica os atributos que atendem a condição informada, no caso ID dentre os jogadores 
+            return _players.Any(x => x.Id.Equals(ID));       //Any verifica os atributos que atendem a condição informada, no caso ID dentre os jogadores 
         }
         public bool lookforteams(long IDTEAM)               //método análogo ao lookforplayers, mas com foco nos times
         {
-            return Teams.Any(x => x.Id.Equals(IDTEAM));
+            return _teams.Any(x => x.Id.Equals(IDTEAM));
         }
         public void AddTeam(long id, string name, DateTime createDate, string mainShirtColor, string secondaryShirtColor)
         {
@@ -26,7 +28,7 @@ namespace Codenation.Challenge
             {
                 throw new UniqueIdentifierException("Already informed Team");
             }
-            Teams.Add(new Team          //adiciona novo time
+            _teams.Add(new Team          //adiciona novo time
             {
                 DataCriacao             =   createDate,
                 CorUniformePrincipal    =   mainShirtColor,
@@ -46,7 +48,7 @@ namespace Codenation.Challenge
             {
                 throw new TeamNotFoundException("Team not listed yet please check the id again");
             }
-            Players.Add(new Player      //adiciona jogador
+            _players.Add(new Player      //adiciona jogador
             {
                 BirthDate   =   birthDate,
                 SkillLevel  =   skillLevel,
@@ -62,23 +64,23 @@ namespace Codenation.Challenge
             {
                 throw new PlayerNotFoundException("Player not listed yet please check the id again");
             }
-            var newcap      =   Players.FindIndex(x => x.Id == playerId);
-            var teamidcap   =   Players[newcap].TeamId; //obtenho idnovocapitao
-            var oldcap      =   Players.Where(x => x.TeamId == teamidcap)   //verifico antigo se capantigo existe
+            var newcap      =   _players.FindIndex(x => x.Id == playerId);
+            var teamidcap   =   _players[newcap].TeamId; //obtenho idnovocapitao
+            var oldcap      =   _players.Where(x => x.TeamId == teamidcap)   //verifico antigo se capantigo existe
             .Where(x=> x.iscap == true)
             .SingleOrDefault();
             if(oldcap != null)
             {
-                var oldcapId    =   Players.FindIndex(x => x.Id == (oldcap.Id));
-                Players[oldcapId].iscap   =   false;
+                var oldcapId    =   _players.FindIndex(x => x.Id == (oldcap.Id));
+                _players[oldcapId].iscap   =   false;
             }
-            Players[newcap].iscap     =   true;                             //faco do jogador playerId novo capitao
+            _players[newcap].iscap     =   true;                             //faco do jogador playerId novo capitao
         }
         public long GetTeamCaptain(long teamId) //verificar se o teamId possui capitao se sim retornar idcapitao
         {
             if (!lookforteams(teamId))
                 throw new TeamNotFoundException("Team not listed yet please check the id again");
-            var cap   =   Players.Where(x    =>  x.TeamId == teamId)
+            var cap   =   _players.Where(x    =>  x.TeamId == teamId)
             .Where(x    =>  x.iscap == true)
             .SingleOrDefault();
             if(cap == null)
@@ -89,7 +91,7 @@ namespace Codenation.Challenge
         {
             if (!lookforplayers(playerId))
                 throw new PlayerNotFoundException("Player not listed yet please check the id again");
-            var player = Players.Where(x    =>  x.Id == playerId)
+            var player = _players.Where(x    =>  x.Id == playerId)
             .SingleOrDefault();
             return player.Name;
         }
@@ -97,7 +99,7 @@ namespace Codenation.Challenge
         {
             if (!lookforteams(teamId))
                 throw new TeamNotFoundException("Team not listed yet please check the id again");
-            var team = Teams.Where(x    =>  x.Id == teamId)
+            var team = _teams.Where(x    =>  x.Id == teamId)
             .SingleOrDefault();
             return team.Name;
         }
@@ -105,7 +107,7 @@ namespace Codenation.Challenge
         {
             if (!lookforteams(teamId))
                 throw new TeamNotFoundException("Team not listed yet please check the id again");
-            return Players
+            return _players
             .Where(x => x.TeamId==teamId)
             .OrderBy(x=> x.Id)                      //ordena os jogadores por id necessário para teste
             .Select(x=> x.Id)
@@ -116,7 +118,7 @@ namespace Codenation.Challenge
         {
             if (!lookforteams(teamId))
                 throw new TeamNotFoundException("Team not listed yet please check the id again");
-            return Players.Where(x    =>  x.TeamId == teamId)
+            return _players.Where(x    =>  x.TeamId == teamId)
             .OrderByDescending(x =>x.SkillLevel)        //maiores skilllevel ficam em cima e pega o id do primeio da lista
             .First().Id;
         }
@@ -124,7 +126,7 @@ namespace Codenation.Challenge
         {
             if (!lookforteams(teamId))
                 throw new TeamNotFoundException("Team not listed yet please check the id again");
-            return Players.Where(x    =>  x.TeamId == teamId)
+            return _players.Where(x    =>  x.TeamId == teamId)
             .OrderBy(x =>x.BirthDate)                   //ordena jogadores pela data de nascimento e retorna id
             .ThenBy(x => x.Id)
             .First().Id;
@@ -132,7 +134,7 @@ namespace Codenation.Challenge
 
         public List<long> GetTeams()    //verifica os times incluidos na lista
         {
-            var teams = Teams.OrderBy(x    =>  x.Id)
+            var teams = _teams.OrderBy(x    =>  x.Id)
             .Select(x   =>  x.Id)
             .ToList();
             if(teams ==null)            //se não há times retorna uma lista vazia
@@ -146,7 +148,7 @@ namespace Codenation.Challenge
         {
             if (!lookforteams(teamId))
                 throw new TeamNotFoundException("Team not listed yet please check the id again");
-            return Players.Where(x    =>  x.TeamId == teamId)
+            return _players.Where(x    =>  x.TeamId == teamId)
             .OrderByDescending(x =>x.Salary)
             .ThenBy(x => x.Id)
             .First().Id;
@@ -156,14 +158,14 @@ namespace Codenation.Challenge
         {
             if (!lookforplayers(playerId))
                 throw new PlayerNotFoundException("Player not listed yet please check the id again");
-            var jogador = Players.Where(x    =>  x.Id == playerId)
+            var jogador = _players.Where(x    =>  x.Id == playerId)
             .SingleOrDefault();
             return jogador.Salary;
         }
 
         public List<long> GetTopPlayers(int top)        // retorna a quantidade int top de melhores jogadores
         {
-            var topplayers = Players
+            var topplayers = _players
             .OrderByDescending(x =>x.SkillLevel)
             .ThenBy(x => x.Id)
             .Take(top)
@@ -171,8 +173,7 @@ namespace Codenation.Challenge
             .ToList();
             if(topplayers == null)
                 return new List<long>();                // se não há jogadores incluidos na lista retorna lista vazia
-            else
-                return  topplayers;
+            return  topplayers;
 
         }
 
@@ -182,9 +183,9 @@ namespace Codenation.Challenge
                 throw new TeamNotFoundException();
             if (!lookforteams(visitorTeamId))
                 throw new TeamNotFoundException();
-            var timeA = Teams.Where(x    =>  x.Id == teamId)
+            var timeA = _teams.Where(x    =>  x.Id == teamId)
             .SingleOrDefault();
-            var timeB = Teams.Where(x    =>  x.Id == visitorTeamId)
+            var timeB = _teams.Where(x    =>  x.Id == visitorTeamId)
             .SingleOrDefault();
             if (timeA.CorUniformePrincipal == timeB.CorUniformePrincipal) //cores das camisas precisam ser diferentes, para isso o visitante pode precisar mudar de cor da camisa
                 return timeB.CorUniformeSecundario;
