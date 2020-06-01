@@ -1,4 +1,4 @@
-# Backend para gerenciar times de futebol
+﻿	# Backend para gerenciar times de futebol
 
 Você é responsável por construir o backend de um novo gerenciador de times de futebol. Após fecharem o escopo do projeto, você e sua equipe definiram a `interface` que o software deve implementar. A interface é a seguinte:
 
